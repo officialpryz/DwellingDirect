@@ -18,6 +18,7 @@ import GoogleIcon from './GoogleIcon';
 import { auth, googleProvider } from '../firebase-config';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { CssBaseline } from '@mui/joy';
+import { useNavigate } from 'react-router-dom';
 
 interface FormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
@@ -55,18 +56,35 @@ function ColorSchemeToggle(props: IconButtonProps) {
 
 const customTheme = extendTheme({});
 
+
+
 const SignUpPage = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+
+  const navigate = useNavigate();
   
   const handleSubmit = async (event: React.FormEvent<SignUpFormElement>) => {
     event.preventDefault();
-    const formElements = event.currentTarget.elements;
+    const formElements = event.currentTarget.elements as HTMLFormControlsCollection & {
+      email: HTMLInputElement;
+      password: HTMLInputElement;
+    };
+
     const email = formElements.email.value;
     const password = formElements.password.value;
+
+    if (email && password) {
+      console.log({ email, password });
+
+      navigate('/registration-page/App');
+    } else {
+      console.error("Email or Password is missing");
+    }
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log('User signed up:', userCredential.user);
+        //navigate('/registration-page/App', { state: { email: userCredential.user.email } });
       })
       .catch((error) => {
         console.error('Error signing up:', error.message);
@@ -191,6 +209,7 @@ const SignUpPage = () => {
                   <FormLabel>Email</FormLabel>
                   <Input
                     type="email"
+                    name="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -199,6 +218,7 @@ const SignUpPage = () => {
                   <FormLabel>Password</FormLabel>
                   <Input
                     type="password"
+                    name="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />

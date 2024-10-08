@@ -7,6 +7,7 @@ import HeroLeft01 from './framesx-web-block/blocks/HeroLeft01';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignInPage from './sign-in-side/SignIn';
 import SignUpPage from './sign-up-side/SignUp';
+import RegistrationPage from './registration-page/App'
 
 const App: React.FC = () => {
   return (
@@ -31,6 +32,7 @@ const App: React.FC = () => {
           } />
           <Route path="/SignIn" element={<SignInPage />} />
           <Route path="/SignUp" element={<SignUpPage />} />
+          <Route path= "/registration-page/App" element={<RegistrationPage />} />
       </Routes>
       </Router>
     </CssVarsProvider>
