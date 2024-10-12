@@ -17,7 +17,7 @@ DwellingDirect is a real estate platform that allows users to search, list, and 
 
 - **User Authentication**: Secure login and signup using Firebase authentication.
 - **Property Listings**: Users can add, edit, and view property listings.
-- **Cloud-based Image Storage**: Property images are stored securely using Cloudinary or AWS S3.
+- **Cloud-based Image Storage**: Property images are stored securely using Cloudinary.
 - **Verified Listings**: Property listings can be marked as verified by administrators.
 - **Responsive Design**: The frontend is optimized for all screen sizes.
 
