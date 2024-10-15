@@ -19,6 +19,8 @@ import { auth, googleProvider } from '../firebase-config';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { CssBaseline } from '@mui/joy';
 import { useNavigate } from 'react-router-dom';
+//import { onAuthStateChanged } from 'firebase/auth';
+//import { useEffect } from 'react';
 
 interface FormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
@@ -63,6 +65,7 @@ const SignUpPage = () => {
   const [password, setPassword] = React.useState('');
 
   const navigate = useNavigate();
+
   
   const handleSubmit = async (event: React.FormEvent<SignUpFormElement>) => {
     event.preventDefault();
@@ -95,6 +98,7 @@ const SignUpPage = () => {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
         console.log('Signed up with Google:', result.user);
+        navigate('/registration-page/App');
       })
       .catch((error) => {
         console.error('Error with Google Sign-Up:', error.message);

@@ -9,8 +9,11 @@ import SignInPage from './sign-in-side/SignIn';
 import SignUpPage from './sign-up-side/SignUp';
 import RegistrationPage from './registration-page/App'
 import RentalDashboard from './dashboard/App';
+import ListingPage from './listing/Listing';
+import NavBar from './dashboard/components/NavBar';
+//import ListingPage from './listing/Listing';
 
-const App: React.FC = () => {
+const Main: React.FC = () => {
   return (
   <CssVarsProvider theme={framesxTheme}>
       <CssBaseline />
@@ -35,6 +38,9 @@ const App: React.FC = () => {
           <Route path="/SignUp" element={<SignUpPage />} />
           <Route path= "/registration-page/App" element={<RegistrationPage />} />
           <Route path="/dashboard/App" element={<RentalDashboard />} />
+          <Route path="/listing/Listing" element={<ListingPage />} />
+          <Route path="/dashboard/components/NavBar" element={<NavBar />} />
+          
       </Routes>
       </Router>
     </CssVarsProvider>
@@ -42,4 +48,4 @@ const App: React.FC = () => {
 
 };
 
-export default App;
+export default Main;
