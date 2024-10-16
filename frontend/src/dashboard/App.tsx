@@ -1,4 +1,4 @@
-import * as React from 'react';
+/*import React, { useState, useEffect } from 'react';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
@@ -10,9 +10,43 @@ import HeaderSection from './components/HeaderSection';
 import Search from './components/Search';
 import Filters from './components/Filters';
 import Pagination from './components/Pagination';
-//import { useNavigate } from 'react-router-dom';
+
+// Define the type for a property listing
+type PropertyListing = {
+  id: string;
+  propertyTitle: string;
+  state: string;
+  address: string;
+  description: string;
+  water: boolean;
+  wifi: boolean;
+  power: boolean;
+  rentType: string;
+  rentPrice: string;
+  agencyPrice: string;
+  images: string;    // Assuming this is an array of image URLs
+  rareFind: boolean; 
+};
 
 export default function RentalDashboard() {
+  const [properties, setProperties] = useState<PropertyListing[]>([]);
+
+  useEffect(() => {
+    // Fetch properties from your API
+    const fetchProperties = async () => {
+      try {
+        // Replace this with your actual API call
+        const response = await fetch('/api/properties');
+        const data = await response.json();
+        setProperties(data);
+      } catch (error) {
+        console.error('Error fetching properties:', error);
+      }
+    };
+
+    fetchProperties();
+  }, []);
+
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
@@ -20,7 +54,7 @@ export default function RentalDashboard() {
       <Box
         component="main"
         sx={{
-          height: 'calc(100vh - 55px)', // 55px is the height of the NavBar
+          height: 'calc(100vh - 55px)',
           display: 'grid',
           gridTemplateColumns: { xs: 'auto', md: '60% 40%' },
           gridTemplateRows: 'auto 1fr auto',
@@ -51,47 +85,170 @@ export default function RentalDashboard() {
         <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
           <Filters />
           <Stack spacing={2} sx={{ overflow: 'auto' }}>
-            <RentalCard
-              title="A Stylish Apt, 5 min walk to Queen Victoria Market"
-              category="Entire apartment rental in Victoria Island"
-              rareFind
-              image="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=400"
-            />
-            <RentalCard
-              title="Designer NY style loft"
-              category="Entire loft in central business district"
-              liked
-              image="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400"
-            />
-            <RentalCard
-              title="5 minute walk from University of Melbourne"
-              category="Entire rental unit in Lekki"
-              image="https://images.unsplash.com/photo-1537726235470-8504e3beef77?auto=format&fit=crop&w=400"
-            />
-            <RentalCard
-              title="Magnificent apartment next to public transport"
-              category="Entire apartment rental in Ikoyi"
-              image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=400"
-            />
-            <RentalCard
-              title="Next to shoppng mall and public transport"
-              category="Entire apartment rental in Ajah"
-              image="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=400"
-            />
-            <RentalCard
-              title="Endless ocean view"
-              category="A private room in a shared apartment in Lekki"
-              image="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=400"
-            />
-            <RentalCard
-              title="A Stylish Apt, 5 min walk to Queen Victoria Market"
-              category="one bedroom apartment in Banana Island"
-              image="https://images.unsplash.com/photo-1481437156560-3205f6a55735?auto=format&fit=crop&w=400"
-            />
+            {properties.map((property) => (
+              <RentalCard
+                key={property.id}
+                propertyTitle={property.propertyTitle}
+                rentType={`${property.rentType === 'yearly' ? 'Yearly' : 'Shortlet'} rental in ${property.state}`}
+                images={property.images[0] || 'https://via.placeholder.com/400x300'}
+                rareFind={property.wifi && property.water && property.power}
+                rentPrice={`₦${property.rentPrice}`} id={''} state={''} address={''} description={''} water={false} wifi={false} power={false} agencyPrice={''}              />
+            ))}
           </Stack>
         </Stack>
         <Pagination />
       </Box>
     </CssVarsProvider>
   );
+} */
+
+
+
+import React, { useState, useEffect } from 'react';
+import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
+import CssBaseline from '@mui/joy/CssBaseline';
+import Box from '@mui/joy/Box';
+import Typography from '@mui/joy/Typography';
+import Input from '@mui/joy/Input';
+import IconButton from '@mui/joy/IconButton';
+import Button from '@mui/joy/Button';
+import Card from '@mui/joy/Card';
+import Chip from '@mui/joy/Chip';
+import AspectRatio from '@mui/joy/AspectRatio';
+import { Search, FilterList, LightMode, DarkMode } from '@mui/icons-material';
+
+import NavBar from './components/NavBar';
+
+type PropertyListing = {
+  id: string;
+  propertyTitle: string;
+  state: string;
+  address: string;
+  description: string;
+  water: boolean;
+  wifi: boolean;
+  power: boolean;
+  rentType: string;
+  rentPrice: string;
+  agencyPrice: string;
+  images: string[];
+  rareFind: boolean;
+};
+
+const amenityIcons = {
+  water: '💧',
+  wifi: '📶',
+  power: '⚡'
+};
+
+export default function RentalDashboard() {
+  const { mode, setMode } = useColorScheme();
+  const [properties, setProperties] = useState<PropertyListing[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/properties');
+        if (!response.ok) {
+          throw new Error('Failed to fetch properties');
+        }
+        const data = await response.json();
+        setProperties(data);
+      } catch (error) {
+        console.error('Error fetching properties:', error);
+        setError('Failed to load properties. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, []);
+
+  const filteredProperties = properties.filter(property =>
+    property.propertyTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    property.state.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <CssVarsProvider disableTransitionOnChange>
+      <CssBaseline />
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: 'background.body' }}>
+        <NavBar />
+        <Box component="main" sx={{ flexGrow: 1, p: { xs: 2, md: 3 } }}>
+          <Typography level="h2" sx={{ mb: 2 }}>Find Your Perfect Rental</Typography>
+          <Box sx={{ display: 'flex', gap: 2, mb: 3, flexDirection: { xs: 'column', sm: 'row' } }}>
+            <Input
+              startDecorator={<Search />}
+              placeholder="Search properties..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              sx={{ flexGrow: 1 }}
+            />
+            <Button
+              variant="outlined"
+              color="neutral"
+              startDecorator={<FilterList />}
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              Filters
+            </Button>
+            <IconButton
+              variant="plain"
+              color="neutral"
+              onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}
+            >
+              {mode === 'dark' ? <LightMode /> : <DarkMode />}
+            </IconButton>
+          </Box>
+          {showFilters && (
+            <Box sx={{ mb: 3, p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 'sm' }}>
+              
+              <Typography level="body-sm">Filter options will be displayed here</Typography>
+            </Box>
+          )}
+          {isLoading ? (
+            <Typography>Loading properties...</Typography>
+          ) : error ? (
+            <Typography color="danger">{error}</Typography>
+          ) : (
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr' }, gap: 2 }}>
+              {filteredProperties.map((property) => (
+                <Card key={property.id} variant="outlined">
+                  <AspectRatio ratio="16/9">
+                    <img
+                      src={property.images[0] || 'https://via.placeholder.com/300x200'}
+                      alt={property.propertyTitle}
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </AspectRatio>
+                  <Box sx={{ p: 2 }}>
+                    <Typography level="h4" sx={{ mb: 0.5 }}>{property.propertyTitle}</Typography>
+                    <Typography level="body-sm" sx={{ mb: 1 }}>{property.address}, {property.state}</Typography>
+                    <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
+                      {Object.entries(amenityIcons).map(([key, icon]) => 
+                        property[key as keyof PropertyListing] && (
+                          <Chip key={key} size="sm" variant="soft">{icon} {key}</Chip>
+                        )
+                      )}
+                    </Box>
+                    <Typography level="h4" sx={{ fontWeight: 'bold', mb: 1 }}>₦{property.rentPrice}</Typography>
+                    <Typography level="body-sm" sx={{ mb: 1 }}>{property.rentType === 'yearly' ? 'Yearly' : 'Shortlet'} rental</Typography>
+                    <Button fullWidth variant="solid" color="primary">View Details</Button>
+                  </Box>
+                </Card>
+              ))}
+            </Box>
+          )}
+        </Box>
+      </Box>
+    </CssVarsProvider>
+  );
 }
+
+

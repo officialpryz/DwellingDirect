@@ -11,6 +11,7 @@ import RegistrationPage from './registration-page/App'
 import RentalDashboard from './dashboard/App';
 import ListingPage from './listing/Listing';
 import NavBar from './dashboard/components/NavBar';
+//import ProfileDashboard from './profile-dasboard/Profile';
 //import ListingPage from './listing/Listing';
 
 const Main: React.FC = () => {
@@ -40,6 +41,8 @@ const Main: React.FC = () => {
           <Route path="/dashboard/App" element={<RentalDashboard />} />
           <Route path="/listing/Listing" element={<ListingPage />} />
           <Route path="/dashboard/components/NavBar" element={<NavBar />} />
+          
+          
           
       </Routes>
       </Router>

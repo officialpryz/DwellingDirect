@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -14,7 +15,7 @@ import {
   Stack,
   Textarea,
   Typography,
-  //useTheme
+  useTheme,
 } from '@mui/joy';
 import { useMediaQuery } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
@@ -24,7 +25,15 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import UploadIcon from '@mui/icons-material/Upload';
 import NavBar from '../dashboard/components/NavBar';
 
-// Define the form data type
+// Nigerian states array (unchanged)
+const nigerianStates = [
+  'Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno', 'Cross River',
+  'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'FCT - Abuja', 'Gombe', 'Imo', 'Jigawa', 'Kaduna',
+  'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos', 'Nasarawa', 'Niger', 'Ogun', 'Ondo',
+  'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto', 'Taraba', 'Yobe', 'Zamfara'
+];
+
+// Form data type (unchanged)
 type ListingFormData = {
   propertyTitle: string;
   state: string;
@@ -33,14 +42,16 @@ type ListingFormData = {
   water: boolean;
   wifi: boolean;
   power: boolean;
-  rentType: 'yearly' | 'shortlet';
+  rentType: 'yearly' | 'monthly';
   rentPrice: string;
   agencyPrice: string;
   images: FileList | null;
   video: File | null;
+  contactEmail: string;
+  contactPhone: string;
 };
 
-// Define the validation schema
+// Validation schema (unchanged)
 const schema = yup.object({
   propertyTitle: yup.string().required('Property title is required'),
   state: yup.string().required('State is required'),
@@ -48,13 +59,13 @@ const schema = yup.object({
   description: yup.string().required('Property description is required'),
   rentPrice: yup.number().positive('Rent price must be positive').required('Rent price is required'),
   agencyPrice: yup.number().positive('Agency price must be positive').required('Agency price is required'),
+  contactEmail: yup.string().email('Invalid email').required('Contact email is required'),
+  contactPhone: yup.string().required('Contact phone is required'),
 }).required();
 
-
-
 const ListingPage: React.FC = () => {
-  //const theme = useTheme();
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const navigate = useNavigate();
+  const theme = useTheme();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const { handleSubmit, control, formState: { errors } } = useForm<ListingFormData>({
@@ -72,16 +83,17 @@ const ListingPage: React.FC = () => {
       agencyPrice: '',
       images: null,
       video: null,
+      contactEmail: '',
+      contactPhone: '',
     },
   });
 
   const onSubmit = async (data: ListingFormData) => {
     setIsSubmitting(true);
     try {
-      // Submit data to your API
       console.log(data);
-      // Simulating API call
       await new Promise(resolve => setTimeout(resolve, 2000));
+      navigate('/dashboard/App');
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
@@ -90,23 +102,28 @@ const ListingPage: React.FC = () => {
   };
 
   return (
-    <CssVarsProvider >
+    <CssVarsProvider>
       <CssBaseline />
       <NavBar />
-      <Box sx={{ maxWidth: 800, margin: 'auto', p: 3 }}>
-        <Typography level="h2" sx={{ mb: 2 }}>
+      <Box sx={{ 
+        maxWidth: '100%', 
+        margin: 'auto', 
+        p: { xs: 2, sm: 3, md: 4 },
+        backgroundColor: 'background.surface',
+      }}>
+        <Typography level="h2" sx={{ mb: 2, fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' } }}>
           List Your Property
         </Typography>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={2}>
+          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
             {/* Property Title */}
-            <Grid xs={12}>
+            <Grid xs={4} sm={8} md={12}>
               <Controller
                 name="propertyTitle"
                 control={control}
                 render={({ field }) => (
-                  <FormControl error={!!errors.propertyTitle}>
+                  <FormControl error={!!errors.propertyTitle} sx={{ width: '100%' }}>
                     <FormLabel>Property Title</FormLabel>
                     <Input {...field} placeholder="Enter property title" />
                     {errors.propertyTitle && (
@@ -120,17 +137,17 @@ const ListingPage: React.FC = () => {
             </Grid>
 
             {/* State Selector */}
-            <Grid xs={12} sm={6}>
+            <Grid xs={4} sm={4} md={6}>
               <Controller
                 name="state"
                 control={control}
                 render={({ field }) => (
-                  <FormControl error={!!errors.state}>
+                  <FormControl error={!!errors.state} sx={{ width: '100%' }}>
                     <FormLabel>State</FormLabel>
                     <Select {...field} placeholder="Select State">
-                      <Option value="Lagos">Lagos</Option>
-                      <Option value="Abuja">Abuja</Option>
-                      <Option value="Oyo">Oyo</Option>
+                      {nigerianStates.map((state) => (
+                        <Option key={state} value={state}>{state}</Option>
+                      ))}
                     </Select>
                     {errors.state && (
                       <Typography level="body-xs" color="danger">
@@ -143,12 +160,12 @@ const ListingPage: React.FC = () => {
             </Grid>
 
             {/* Address */}
-            <Grid xs={12} sm={6}>
+            <Grid xs={4} sm={4} md={6}>
               <Controller
                 name="address"
                 control={control}
                 render={({ field }) => (
-                  <FormControl error={!!errors.address}>
+                  <FormControl error={!!errors.address} sx={{ width: '100%' }}>
                     <FormLabel>Full Address</FormLabel>
                     <Input {...field} placeholder="Enter full address" />
                     {errors.address && (
@@ -162,12 +179,12 @@ const ListingPage: React.FC = () => {
             </Grid>
 
             {/* Property Description */}
-            <Grid xs={12}>
+            <Grid xs={4} sm={8} md={12}>
               <Controller
                 name="description"
                 control={control}
                 render={({ field }) => (
-                  <FormControl error={!!errors.description}>
+                  <FormControl error={!!errors.description} sx={{ width: '100%' }}>
                     <FormLabel>Property Description</FormLabel>
                     <Textarea
                       {...field}
@@ -185,9 +202,13 @@ const ListingPage: React.FC = () => {
             </Grid>
 
             {/* Amenities */}
-            <Grid xs={12}>
+            <Grid xs={4} sm={8} md={12}>
               <Typography level="body-sm">Amenities</Typography>
-              <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
+              <Stack 
+                direction={useMediaQuery(theme.breakpoints.up('sm')) ? 'row' : 'column'}
+                spacing={useMediaQuery(theme.breakpoints.up('sm')) ? 2 : 1}
+                sx={{ flexWrap: 'wrap' }}
+              >
                 <Controller
                   name="water"
                   control={control}
@@ -225,16 +246,16 @@ const ListingPage: React.FC = () => {
             </Grid>
 
             {/* Rent Type */}
-            <Grid xs={12} sm={4}>
+            <Grid xs={4} sm={4} md={4}>
               <Controller
                 name="rentType"
                 control={control}
                 render={({ field }) => (
-                  <FormControl>
+                  <FormControl sx={{ width: '100%' }}>
                     <FormLabel>Rent Type</FormLabel>
                     <Select {...field} placeholder="Select Rent Type">
                       <Option value="yearly">Yearly Rent</Option>
-                      <Option value="shortlet">Shortlet</Option>
+                      <Option value="monthly">Shortlet</Option>
                     </Select>
                   </FormControl>
                 )}
@@ -242,12 +263,12 @@ const ListingPage: React.FC = () => {
             </Grid>
 
             {/* Rent Price */}
-            <Grid xs={12} sm={4}>
+            <Grid xs={4} sm={2} md={4}>
               <Controller
                 name="rentPrice"
                 control={control}
                 render={({ field }) => (
-                  <FormControl error={!!errors.rentPrice}>
+                  <FormControl error={!!errors.rentPrice} sx={{ width: '100%' }}>
                     <FormLabel>Rent Price (₦)</FormLabel>
                     <Input {...field} type="number" placeholder="Enter rent price" />
                     {errors.rentPrice && (
@@ -261,12 +282,12 @@ const ListingPage: React.FC = () => {
             </Grid>
 
             {/* Agency Price */}
-            <Grid xs={12} sm={4}>
+            <Grid xs={4} sm={2} md={4}>
               <Controller
                 name="agencyPrice"
                 control={control}
                 render={({ field }) => (
-                  <FormControl error={!!errors.agencyPrice}>
+                  <FormControl error={!!errors.agencyPrice} sx={{ width: '100%' }}>
                     <FormLabel>Agency Price (₦)</FormLabel>
                     <Input {...field} type="number" placeholder="Enter agency price" />
                     {errors.agencyPrice && (
@@ -279,8 +300,46 @@ const ListingPage: React.FC = () => {
               />
             </Grid>
 
+            {/* Contact Email */}
+            <Grid xs={4} sm={4} md={6}>
+              <Controller
+                name="contactEmail"
+                control={control}
+                render={({ field }) => (
+                  <FormControl error={!!errors.contactEmail} sx={{ width: '100%' }}>
+                    <FormLabel>Contact Email</FormLabel>
+                    <Input {...field} type="email" placeholder="Enter contact email" />
+                    {errors.contactEmail && (
+                      <Typography level="body-xs" color="danger">
+                        {errors.contactEmail.message}
+                      </Typography>
+                    )}
+                  </FormControl>
+                )}
+              />
+            </Grid>
+
+            {/* Contact Phone */}
+            <Grid xs={4} sm={4} md={6}>
+              <Controller
+                name="contactPhone"
+                control={control}
+                render={({ field }) => (
+                  <FormControl error={!!errors.contactPhone} sx={{ width: '100%' }}>
+                    <FormLabel>Contact Phone</FormLabel>
+                    <Input {...field} type="tel" placeholder="Enter contact phone" />
+                    {errors.contactPhone && (
+                      <Typography level="body-xs" color="danger">
+                        {errors.contactPhone.message}
+                      </Typography>
+                    )}
+                  </FormControl>
+                )}
+              />
+            </Grid>
+
             {/* File Input for Images */}
-            <Grid xs={12} sm={6}>
+            <Grid xs={4} sm={4} md={6}>
               <Controller
                 name="images"
                 control={control}
@@ -290,6 +349,7 @@ const ListingPage: React.FC = () => {
                       component="label"
                       startDecorator={<PhotoCamera />}
                       fullWidth
+                      variant="outlined"
                     >
                       Upload Images
                       <input
@@ -311,7 +371,7 @@ const ListingPage: React.FC = () => {
             </Grid>
 
             {/* File Input for Video */}
-            <Grid xs={12} sm={6}>
+            <Grid xs={4} sm={4} md={6}>
               <Controller
                 name="video"
                 control={control}
@@ -321,6 +381,7 @@ const ListingPage: React.FC = () => {
                       component="label"
                       startDecorator={<UploadIcon />}
                       fullWidth
+                      variant="outlined"
                     >
                       Upload Video
                       <input
@@ -341,7 +402,7 @@ const ListingPage: React.FC = () => {
             </Grid>
 
             {/* Submit Button */}
-            <Grid xs={12}>
+            <Grid xs={12} sm={8} md={12}>
               <Button
                 type="submit"
                 fullWidth
