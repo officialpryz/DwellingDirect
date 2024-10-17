@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
 import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
@@ -21,14 +20,13 @@ export default function HeroLeft01() {
           fontSize: 'clamp(1.875rem, 1.3636rem + 2.1818vw, 3rem)',
         }}
       >
-        A large headlinerer about our product features & services
+        Find Your Perfect Space To Rent, Buy, or Lease with Ease
       </Typography>
       <Typography
         textColor="text.secondary"
         sx={{ fontSize: 'lg', lineHeight: 'lg' }}
       >
-        A descriptive secondary text placeholder. Use it to explain your business
-        offer better.
+        "Browse listings, filter by location, and get real-time details. Whether it’s a rental or purchase, your next space is just a few clicks away."
       </Typography>
       <Button component={RouterButton} to="/SignUp" size="lg" endDecorator={<ArrowForward fontSize="large" />}>
         Get Started
@@ -37,17 +35,7 @@ export default function HeroLeft01() {
         Already a member?{''} 
         <Link component={RouterLink} to="/SignIn" sx={{ fontWeight: 'lg' }}> Sign in </Link>
       </Typography>
-      <Typography
-        level="body-xs"
-        sx={{
-          position: 'absolute',
-          top: '2rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-        }}
-      >
-        DwellingDirect
-      </Typography>
+      
     </TwoSidedLayout>
   );
 }

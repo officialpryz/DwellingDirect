@@ -19,6 +19,8 @@ import { auth, googleProvider } from '../firebase-config';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { CssBaseline } from '@mui/joy';
 import { useNavigate } from 'react-router-dom';
+import BackgroundImageLight from '../assets/images/black_on_white.png';
+import BackgroundImageDark from '../assets/images/white_on_trans.png';
 //import { onAuthStateChanged } from 'firebase/auth';
 //import { useEffect } from 'react';
 
@@ -149,7 +151,7 @@ const SignUpPage = () => {
               <IconButton variant="soft" color="primary" size="sm">
                 <BadgeRoundedIcon />
               </IconButton>
-              <Typography level="title-lg">Company logo</Typography>
+              <Typography level="title-lg">DwellingDirect</Typography>
             </Box>
             <ColorSchemeToggle />
           </Box>
@@ -237,7 +239,7 @@ const SignUpPage = () => {
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body-xs" sx={{ textAlign: 'center' }}>
-              © Your company {new Date().getFullYear()}
+              © DwellingDirect {new Date().getFullYear()}
             </Typography>
           </Box>
         </Box>
@@ -258,10 +260,10 @@ const SignUpPage = () => {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundImage:
-            'url(https://images.unsplash.com/photo-1527181152855-fc03fc7949c8?auto=format&w=1000&dpr=2)',
+            `url(${BackgroundImageLight})`,
           [theme.getColorSchemeSelector('dark')]: {
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1572072393749-3ca9c8ea0831?auto=format&w=1000&dpr=2)',
+             `url(${BackgroundImageDark})` ,
           },
         })}
       />
