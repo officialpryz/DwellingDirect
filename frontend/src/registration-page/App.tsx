@@ -18,6 +18,8 @@ import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import BackgroundImageLight from '../assets/images/black_on_white.png';
+import BackgroundImageDark from '../assets/images/white_on_trans.png';
 
 // Function for light/dark mode toggle
 function ColorSchemeToggle(props: IconButtonProps) {
@@ -171,10 +173,10 @@ export default function RegistrationPage() {
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1527181152855-fc03fc7949c8?auto=format&w=1000&dpr=2)',
+              `url(${BackgroundImageLight})`,
             [theme.getColorSchemeSelector('dark')]: {
               backgroundImage:
-                'url(https://images.unsplash.com/photo-1572072393749-3ca9c8ea0831?auto=format&w=1000&dpr=2)',
+                `url(${BackgroundImageDark})`,
             },
           })}
         />
