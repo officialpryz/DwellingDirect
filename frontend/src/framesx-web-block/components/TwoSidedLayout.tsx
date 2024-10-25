@@ -3,7 +3,7 @@ import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
 import Container from '@mui/joy/Container';
 import { typographyClasses } from '@mui/joy/Typography';
-import MyImage from '../assets/images/black_on_white.png';
+//import MyImage from '../assets/images/black_on_white.png';
 //import BackgroundImageLight from '../assets/images/black_on_white.png';
 //import BackgroundImageDark from '../assets/images/white_on_trans.png';
 
