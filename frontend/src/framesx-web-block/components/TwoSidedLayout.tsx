@@ -4,8 +4,10 @@ import Box from '@mui/joy/Box';
 import Container from '@mui/joy/Container';
 import { typographyClasses } from '@mui/joy/Typography';
 import MyImage from '../assets/images/black_on_white.png';
+//import BackgroundImageLight from '../assets/images/black_on_white.png';
+//import BackgroundImageDark from '../assets/images/white_on_trans.png';
 
-//const myImage =require('/assets/images/black_on_white.png')
+//const MyImage =require('/src/assets/images/black_on_white.png')
 export default function TwoSidedLayout({
   children,
   reversed,
@@ -69,12 +71,9 @@ export default function TwoSidedLayout({
           bgcolor: 'background.level2',
           flexBasis: '50%',
         })}
-      >
-        <img
-        src={MyImage}
-        loading='lazy'
-          alt=""
-        />
+        >
+
+       
       </AspectRatio>
     </Container>
   );
