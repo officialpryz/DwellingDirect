@@ -176,7 +176,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import { Link, useNavigate } from 'react-router-dom';
 import ColorSchemeToggle from './ColorSchemeToggle';
-//import LogoIcon from '../assets/images/favicon_io (1)/favicon.ico';  // Adjust the path based on your folder structure
 
 
 export default function NavBar() {

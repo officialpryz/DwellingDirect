@@ -4,7 +4,7 @@ import Box from '@mui/joy/Box';
 import Container from '@mui/joy/Container';
 import { typographyClasses } from '@mui/joy/Typography';
 
-const myImage =require('/Users/praiz/Documents/GitHub/DwellingDirect/frontend/src/assets/images/black_on_white.png')
+const myImage =require('/assets/images/black_on_white.png')
 export default function TwoSidedLayout({
   children,
   reversed,
