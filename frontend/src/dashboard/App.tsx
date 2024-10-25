@@ -10,6 +10,7 @@ import Card from '@mui/joy/Card';
 import Chip from '@mui/joy/Chip';
 import AspectRatio from '@mui/joy/AspectRatio';
 import { Search, FilterList } from '@mui/icons-material';
+//import RentalCard from './components/RentalCard';
 
 import NavBar from './components/NavBar';
 
