@@ -13,6 +13,7 @@ import ListingPage from './listing/Listing';
 import NavBar from './dashboard/components/NavBar';
 //import ProfileDashboard from './profile-dasboard/Profile';
 //import ListingPage from './listing/Listing';
+import { Analytics } from "@vercel/analytics/react"
 
 const Main: React.FC = () => {
   return (
@@ -32,6 +33,7 @@ const Main: React.FC = () => {
         }}
       >
         <HeroLeft01 />
+        <Analytics />
 
       </Box>
           } />
